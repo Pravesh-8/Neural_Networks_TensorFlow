@@ -1,31 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <title>Music Genre Classifier</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        section {
+            padding: 100px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, #1c0522, transparent);
+            z-index: 1000;
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .upload-section, .result-section {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 600px;
+            margin: 20px 0;
+        }
+
+        .upload-section h2, .result-section h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #2b1055;
+        }
+
+        .upload-section input[type="file"] {
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 2px solid #2b1055;
+            border-radius: 40px;
+            color: #2b1055;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .result-section p {
+            font-size: 1.2em;
+            color: #2b1055;
+        }
+
+        section img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        section img#moon {
+            mix-blend-mode: screen;
+        }
+
+        section img#mountains_front {
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
-    <div class="h-64 border-solid border-black border-4 text-center" id="dropzone">
-        Drop files here
-    </div>
+    <header>
+        <a href="#" class="logo">Logo</a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </header>
 
-    <form action="test.php" enctype="multipart/form-data" method="post">
-        <input type="file" name="files[]" id="files" multiple>
-        <button type="submit">Send</button>
-    </form>
+    <section>
+        <div class="content-container">
+            <div class="upload-section">
+                <h2>Upload Music File</h2>
+                <input type="file" id="audioInput" accept=".wav,.mp3" onchange="handleFileUpload(event)">
+            </div>
+            <div class="result-section">
+                <h2>Prediction Result</h2>
+                <p id="predictionResult">Please upload a music file to get the prediction.</p>
+            </div>
+        </div>
+        <img src="stars.png" id="stars">
+        <img src="moon.png" id="moon">
+        <img src="mountains_behind.png" id="mountains_behind">
+        <img src="mountains_front.png" id="mountains_front">
+    </section>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-        var $dropzone = $('#dropzone');
-        $dropzone.on('drag dragstart dragend dragover dragenter dragleave drop', function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }).on('drop', function(event) {
-            document.querySelector('#files').files = event.originalEvent.dataTransfer.files;
+        let stars = document.getElementById('stars');
+        let moon = document.getElementById('moon');
+        let mountains_behind = document.getElementById('mountains_behind');
+        let mountains_front = document.getElementById('mountains_front');
+        let header = document.querySelector('header');
+
+        window.addEventListener('scroll', function() {
+            let value = window.scrollY;
+            stars.style.left = value * 0.25 + 'px';
+            moon.style.top = value * 1.05 + 'px';
+            mountains_behind.style.top = value * 0.5 + 'px';
+            mountains_front.style.top = value * 0 + 'px';
+            header.style.top = value * 0.5 + 'px';
         });
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            const allowedTypes = ['audio/wav', 'audio/mpeg'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please upload a .wav or .mp3 file.');
+                return;
+            }
+
+            // Here, you would send the file to your server or API for prediction
+            // and update the predictionResult element with the prediction result
+            const predictionResult = document.getElementById('predictionResult');
+            predictionResult.textContent = 'Prediction placeholder text';
+        }
     </script>
 </body>
 </html>
